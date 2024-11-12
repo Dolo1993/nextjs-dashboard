@@ -1,22 +1,17 @@
 import { generateYAxis } from '@/app/lib/utils';
 import { CalendarIcon } from '@heroicons/react/24/outline';
 import { lusitana } from '@/app/ui/fonts';
-import { Revenue } from '@/app/lib/definitions';
 import { fetchRevenue } from '@/app/lib/data';
 
-// This component is representational only.
-// For data visualization UI, check out:
-// https://www.tremor.so/
-// https://www.chartjs.org/
-// https://airbnb.io/visx/
-
-export default async function RevenueChart() { // Make component async, remove the props
-  const revenue = await fetchRevenue(); // Fetch data inside the component
+export default async function RevenueChart() {
+  // Fetch revenue data asynchronously
+  const revenue = await fetchRevenue();
   const chartHeight = 350;
-  // NOTE: Uncomment this code in Chapter 7
 
+  // Generate y-axis labels based on revenue data
   const { yAxisLabels, topLabel } = generateYAxis(revenue);
 
+  // If no revenue data is available, display a message
   if (!revenue || revenue.length === 0) {
     return <p className="mt-4 text-gray-400">No data available.</p>;
   }
@@ -26,10 +21,9 @@ export default async function RevenueChart() { // Make component async, remove t
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
         Recent Revenue
       </h2>
-      {/* NOTE: Uncomment this code in Chapter 7 */}
-
-       <div className="rounded-xl bg-gray-50 p-4">
+      <div className="rounded-xl bg-gray-50 p-4">
         <div className="sm:grid-cols-13 mt-0 grid grid-cols-12 items-end gap-2 rounded-md bg-white p-4 md:gap-4">
+          {/* Y-axis labels */}
           <div
             className="mb-6 hidden flex-col justify-between text-sm text-gray-400 sm:flex"
             style={{ height: `${chartHeight}px` }}
@@ -39,6 +33,7 @@ export default async function RevenueChart() { // Make component async, remove t
             ))}
           </div>
 
+          {/* Revenue bars */}
           {revenue.map((month) => (
             <div key={month.month} className="flex flex-col items-center gap-2">
               <div
@@ -53,11 +48,12 @@ export default async function RevenueChart() { // Make component async, remove t
             </div>
           ))}
         </div>
+        {/* Footer with calendar icon */}
         <div className="flex items-center pb-2 pt-6">
           <CalendarIcon className="h-5 w-5 text-gray-500" />
-          <h3 className="ml-2 text-sm text-gray-500 ">Last 12 months</h3>
+          <h3 className="ml-2 text-sm text-gray-500">Last 12 months</h3>
         </div>
-      </div> 
+      </div>
     </div>
   );
 }
