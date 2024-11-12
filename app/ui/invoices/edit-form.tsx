@@ -9,7 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import { updateInvoice, State} from '@/app/lib/actions';
+import { updateInvoice, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
 
 export default function EditInvoiceForm({
@@ -22,6 +22,7 @@ export default function EditInvoiceForm({
   const initialState: State = { message: null, errors: {} };
   const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
   const [state, formAction] = useActionState(updateInvoiceWithId, initialState);
+
   return (
     <form action={formAction} method="post" className="space-y-6">
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
@@ -114,6 +115,16 @@ export default function EditInvoiceForm({
           </div>
         </fieldset>
       </div>
+
+      {/* Display any error messages */}
+      {state.errors && Object.keys(state.errors).length > 0 && (
+        <div className="text-red-500">
+          {Object.values(state.errors).map((error, index) => (
+            <p key={index}>{error}</p>
+          ))}
+        </div>
+      )}
+
       <div className="mt-6 flex justify-end gap-4">
         <Link
           href="/dashboard/invoices"
